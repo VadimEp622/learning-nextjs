@@ -1,6 +1,6 @@
 "use client";
 
-import { updateInvoice } from "@/app/lib/actions";
+import { State, updateInvoice } from "@/app/lib/actions";
 import { CustomerField, InvoiceForm } from "@/app/lib/definitions";
 import {
   CheckIcon,
@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/app/ui/button";
+import { useActionState } from "react";
 
 export default function EditInvoiceForm({
   invoice,
@@ -18,14 +19,18 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  const initialState: State = { message: null, errors: {} };
+
   // INFO: You can pass id to the Server Action using JS bind. This will ensure that any values passed to the Server Action are encoded.
   //        For example, if the invoice.id is a string like "abc/123", the / character would be encoded as %2F, resulting in the encoded ID being "abc%2F123".
   //        This encoding is important because it ensures that the invoice.id value is properly formatted for use in a URL, which is what the action attribute of the form is expecting.
   //        By using bind to pass the invoice.id to the updateInvoice function, you're allowing Next.js to handle the encoding of the ID value for you, which helps prevent any potential issues with special characters in the ID.
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
 
+  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+
   return (
-    <form action={updateInvoiceWithId}>
+    <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
