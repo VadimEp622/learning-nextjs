@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { lusitana } from "@/app/ui/fonts";
 import {
@@ -19,6 +19,9 @@ export default function LoginForm() {
     authenticate,
     undefined
   );
+
+  // Email: user@nextmail.com
+  // Password: 123456
 
   return (
     <form action={formAction} className="space-y-3">
